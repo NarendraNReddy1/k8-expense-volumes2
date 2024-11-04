@@ -4,7 +4,7 @@ metadata:
   name: mysql
   namespace: expense
 spec:
-  storageClassName: "expense-ebs"# Empty string must be explicitly set otherwise default StorageClass will be set
+  storageClassName: "expense-ebs" # Empty string must be explicitly set otherwise default StorageClass will be set
   accessModes:
     - ReadWriteOnce
   resources:
@@ -61,4 +61,6 @@ spec:
   ports:
   - protocol: TCP
     port: 3306
-    targetPort: 3306        
+    targetPort: 3306                
+
+     
