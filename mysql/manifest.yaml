@@ -10,3 +10,55 @@ spec:
   resources:
     requests:
       storage: 4Gi
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mysql
+  namespace: expense
+spec:
+  selector:
+    matchLabels:
+      component: mysql
+      project: expense
+      tier: db
+  serviceName: "nginx"
+  replicas: 3 # by default is 1
+  template:
+    metadata:
+      labels:
+        component: mysql
+        project: expense
+        tier: db
+    spec:
+      containers:
+      - name: nginx
+        image: narendranreddy/mysql:v1.0
+        ports:
+        - containerPort: 80
+          name: web
+        volumeMounts:
+        - name: mysql
+          mountPath: /var/lib/mysql
+      nodeSelector:
+        topology.kubernetes.io/zone: us-east-1a          
+      volumes:
+      - name: mysql
+        persistentVolumeClaim:
+          claimName: mysql
+---
+# kind: Service
+# apiVersion: v1
+# metadata: 
+#   name: mysql
+#   namespace: expense
+# spec:
+#   clusterIP: None #This is called headless service
+#   selector:
+#     component: mysql
+#     project: expense
+#     tier: db
+#   ports:
+#   - protocol: TCP
+#     port: 3306
+#     targetPort: 3306        
